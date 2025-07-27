@@ -11,7 +11,7 @@ namespace Core.Interface
         Task<T> GetById(int id);
         Task Remove(T entity);
         Task Remove(int id);
-        Task<IEnumerable<T>> SearchEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes);
-        Task<PagedList<T>> GetPagedEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes, int page, int pageSize);
+        Task<IEnumerable<T>> SearchEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes);
+        Task<PagedList<T>> GetPagedEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes, int page, int pageSize);
     }
 }

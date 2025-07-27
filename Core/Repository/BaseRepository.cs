@@ -24,6 +24,11 @@ namespace Core.Repository
 
         public virtual async Task<T> Add(T entity)
         {
+            _context.Entry(entity).Property(x => x.ModifiedById).IsModified = false;
+            _context.Entry(entity).Property(x => x.ModifiedDate).IsModified = false;
+
+            entity.CreatedDate ??= DateTime.UtcNow;
+
             _dbSet.Add(entity);
             await _context.SaveChangesAsync();
 
@@ -32,13 +37,15 @@ namespace Core.Repository
 
         protected abstract Task<IEnumerable<T>> GetEntityAll(DbContext context);
         protected abstract Task<T> GetEntityById(DbContext context, int id);
-        protected abstract Task<IEnumerable<T>> GetEntitySearch(DbContext context, Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes);
-        protected abstract Task<PagedList<T>> GetPagedEntityList(DbContext context, Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes, int page, int pageSize);
+        protected abstract Task<IEnumerable<T>> GetEntitySearch(DbContext context, Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes);
+        protected abstract Task<PagedList<T>> GetPagedEntityList(DbContext context, Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes, int page, int pageSize);
 
         public virtual async Task<T> Update(T entity)
         {
             _context.Entry(entity).Property(x => x.CreatedById).IsModified = false;
             _context.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+
+            entity.ModifiedDate ??= DateTime.UtcNow;
 
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
@@ -65,22 +72,19 @@ namespace Core.Repository
         public virtual async Task Remove(int id)
         {
             T entity = await GetEntityById(_context, id);
-            if (entity != null)
-            {
-                _context.Entry<T>(entity).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
-            }
+            _context.Entry<T>(entity).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> SearchEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes)
+        public async Task<IEnumerable<T>> SearchEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes)
         {
-            if (includes == null) includes = new List<Expression<Func<T, object>>>();
+            includes ??= new List<Expression<Func<T, object>>>();
             return await GetEntitySearch(_context, where, includes);
         }
 
-        public async Task<PagedList<T>> GetPagedEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>> includes, int page, int pageSize)
+        public async Task<PagedList<T>> GetPagedEntity(Expression<Func<T, bool>> where, List<Expression<Func<T, object>>>? includes, int page, int pageSize)
         {
-            if (includes == null) includes = new List<Expression<Func<T, object>>>();
+            includes ??= new List<Expression<Func<T, object>>>();
             return await GetPagedEntityList(_context, where, includes, page, pageSize);
         }
     }
