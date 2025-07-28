@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace Core.Extensions
+namespace Azm.Core.Extensions
 {
     public static class EnumExtensions
 	{

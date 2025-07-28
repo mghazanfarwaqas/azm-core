@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Utils
+namespace Azm.Core.Utils
 {
     public class PagedList<T> 
     {

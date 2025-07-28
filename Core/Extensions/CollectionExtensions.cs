@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Core.Extensions
+namespace Azm.Core.Extensions
 {
     public static class CollectionExtensions
 	{

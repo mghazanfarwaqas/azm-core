@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Core.Extensions
+namespace Azm.Core.Extensions
 {
 	public static class XmlExtensions
 	{

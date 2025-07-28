@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reflection;
-using Core.Utils;
+using Azm.Core.Utils;
 
-namespace Core.Extensions
+namespace Azm.Core.Extensions
 {
 	public static class QueryableExtensions
 	{

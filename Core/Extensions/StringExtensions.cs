@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Core.Extensions
+namespace Azm.Core.Extensions
 {
 	public static partial class StringExtensions
 	{
@@ -265,7 +265,7 @@ namespace Core.Extensions
             return sb.ToString();
         }
 
-        public static string? GetClaimFromJwtWithoutValidation(this string tokenString, string claimType)
+        public static string? GetClaimFromJwtWithoutValidationByClaimName(this string tokenString, string claimType)
         {
             if (string.IsNullOrEmpty(tokenString))
             {

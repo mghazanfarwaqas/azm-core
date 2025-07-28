@@ -1,4 +1,4 @@
-﻿namespace Core.Extensions
+﻿namespace Azm.Core.Extensions
 {
     public static class TaskExtensions
 	{
