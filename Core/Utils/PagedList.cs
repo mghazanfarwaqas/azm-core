@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
-using Core.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Utils
 {
-    public class PagedList<T> : IPagedList<T>
+    public class PagedList<T> 
     {
         private readonly IQueryable<T> _source;
         private readonly IEnumerable<T> _memSource;

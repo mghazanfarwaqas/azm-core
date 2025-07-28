@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -261,6 +263,65 @@ namespace Core.Extensions
             }
 
             return sb.ToString();
+        }
+
+        public static string? GetClaimFromJwtWithoutValidation(this string tokenString, string claimType)
+        {
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return null;
+            }
+
+            // Remove "Bearer " prefix if present
+            if (tokenString.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                tokenString = tokenString.Substring("Bearer ".Length).Trim();
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+
+            // Check if the token string is a valid JWT format
+            if (!handler.CanReadToken(tokenString))
+            {
+                // Token is not in a readable JWT format
+                return null;
+            }
+
+            // Read the token. This parses the token but does NOT validate signature or expiration.
+            var jwtToken = handler.ReadJwtToken(tokenString);
+
+            // Find the claim
+            var claim = jwtToken.Claims.FirstOrDefault(c => c.Type == claimType);
+
+            return claim?.Value;
+        }
+
+        public static IEnumerable<Claim>? GetClaimsFromJwtWithoutValidation(this string tokenString)
+        {
+            if (string.IsNullOrEmpty(tokenString))
+            {
+                return null;
+            }
+
+            // Remove "Bearer " prefix if present
+            if (tokenString.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                tokenString = tokenString.Substring("Bearer ".Length).Trim();
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+
+            // Check if the token string is a valid JWT format
+            if (!handler.CanReadToken(tokenString))
+            {
+                // Token is not in a readable JWT format
+                return null;
+            }
+
+            // Read the token. This parses the token but does NOT validate signature or expiration.
+            var jwtToken = handler.ReadJwtToken(tokenString);
+
+            return jwtToken.Claims;
         }
 
     }
